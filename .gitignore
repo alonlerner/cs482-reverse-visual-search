@@ -2,12 +2,14 @@
 __pycache__/
 *.py[cod]
 *$py.class
+/instances_minitrain2017.json
 
 # C extensions
 *.so
 
 # Distribution / packaging
 .Python
+coco_person/
 build/
 develop-eggs/
 dist/
