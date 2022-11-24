@@ -21,7 +21,7 @@ CLASSES = ['person']
 COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
 # load the model and set it to evaluation mode
-model = torchvision.models.detection.fasterrcnn_resnet50_fpn()
+model = torchvision.models.detection.fasterrcnn_resnet50_fpn(weights='DEFAULT')
 model.eval()
 
 # load the image from disk
@@ -48,23 +48,24 @@ for i in range(0, len(detections["boxes"])):
 	confidence = detections["scores"][i]
 	# filter out weak detections by ensuring the confidence is
 	# greater than the minimum confidence
-	if confidence > args["confidence"]:
+	if confidence > args["confidence"] and int(detections["labels"][i]) == 1:
 		# extract the index of the class label from the detections,
 		# then compute the (x, y)-coordinates of the bounding box
 		# for the object
 		idx = int(detections["labels"][i])
 		box = detections["boxes"][i].detach().cpu().numpy()
 		(startX, startY, endX, endY) = box.astype("int")
+		print(startX)
 		# display the prediction to our terminal
-		label = "{}: {:.2f}%".format(CLASSES[idx], confidence * 100)
+		label = "{}: {:.2f}%".format(CLASSES[0], confidence * 100)
 		print("[INFO] {}".format(label))
 		# draw the bounding box and label on the image
 		cv2.rectangle(orig, (startX, startY), (endX, endY),
-			COLORS[idx], 2)
+			0, 2)
 		y = startY - 15 if startY - 15 > 15 else startY + 15
 		cv2.putText(orig, label, (startX, y),
-			cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
+			cv2.FONT_HERSHEY_SIMPLEX, 0.5, 0, 2)
 # show the output image
-print(detections)
+print(len(detections['boxes']))
 cv2.imshow("Output", orig)
 cv2.waitKey(0)
