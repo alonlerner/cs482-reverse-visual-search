@@ -4,12 +4,13 @@ import numpy as np
 import argparse
 import torch
 import cv2
+import json
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", type=str, required=True,
 	help="path to the input image")
-ap.add_argument("-c", "--confidence", type=float, default=0.5,
+ap.add_argument("-c", "--confidence", type=float, default=0.8,
 	help="minimum probability to filter weak detections")
 args = vars(ap.parse_args())
 
@@ -40,6 +41,8 @@ image = torch.FloatTensor(image)
 # get the detections and predictions
 image = image.to(DEVICE)
 detections = model(image)[0]
+a = []
+
 
 # loop over the detections
 for i in range(0, len(detections["boxes"])):
@@ -55,7 +58,8 @@ for i in range(0, len(detections["boxes"])):
 		idx = int(detections["labels"][i])
 		box = detections["boxes"][i].detach().cpu().numpy()
 		(startX, startY, endX, endY) = box.astype("int")
-		print(startX)
+		a.append({ 'image': args["image"], 'bbox': [int(startX), int(startY), int(endX), int(endY)]})
+		print(a)
 		# display the prediction to our terminal
 		label = "{}: {:.2f}%".format(CLASSES[0], confidence * 100)
 		print("[INFO] {}".format(label))
@@ -65,6 +69,17 @@ for i in range(0, len(detections["boxes"])):
 		y = startY - 15 if startY - 15 > 15 else startY + 15
 		cv2.putText(orig, label, (startX, y),
 			cv2.FONT_HERSHEY_SIMPLEX, 0.5, 0, 2)
+		
+
+with open('person_boxes.json','r+') as file:
+	# First we load existing data into a dict.
+	file_data = json.load(file)
+	# Join new_data with file_data inside emp_details
+	file_data["boxes"].extend(a)
+	# Sets file's current position at offset.
+	file.seek(0)
+	# convert back to json.
+	json.dump(file_data, file, indent = 4)
 # show the output image
 print(len(detections['boxes']))
 cv2.imshow("Output", orig)
