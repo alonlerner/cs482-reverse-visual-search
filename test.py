@@ -60,15 +60,15 @@ for i in range(0, len(detections["boxes"])):
 		(startX, startY, endX, endY) = box.astype("int")
 		a.append({ 'image': args["image"], 'bbox': [int(startX), int(startY), int(endX), int(endY)]})
 		print(a)
-		# display the prediction to our terminal
-		label = "{}: {:.2f}%".format(CLASSES[0], confidence * 100)
-		print("[INFO] {}".format(label))
-		# draw the bounding box and label on the image
-		cv2.rectangle(orig, (startX, startY), (endX, endY),
-			0, 2)
-		y = startY - 15 if startY - 15 > 15 else startY + 15
-		cv2.putText(orig, label, (startX, y),
-			cv2.FONT_HERSHEY_SIMPLEX, 0.5, 0, 2)
+		# # display the prediction to our terminal
+		# label = "{}: {:.2f}%".format(CLASSES[0], confidence * 100)
+		# print("[INFO] {}".format(label))
+		# # draw the bounding box and label on the image
+		# cv2.rectangle(orig, (startX, startY), (endX, endY),
+		# 	0, 2)
+		# y = startY - 15 if startY - 15 > 15 else startY + 15
+		# cv2.putText(orig, label, (startX, y),
+		# 	cv2.FONT_HERSHEY_SIMPLEX, 0.5, 0, 2)
 		
 
 with open('person_boxes.json','r+') as file:
@@ -81,6 +81,6 @@ with open('person_boxes.json','r+') as file:
 	# convert back to json.
 	json.dump(file_data, file, indent = 4)
 # show the output image
-print(len(detections['boxes']))
-cv2.imshow("Output", orig)
-cv2.waitKey(0)
+# print(len(detections['boxes']))
+# cv2.imshow("Output", orig)
+# cv2.waitKey(0)
