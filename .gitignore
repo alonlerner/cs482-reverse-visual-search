@@ -10,6 +10,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 coco_person/
+boxes_images/
 build/
 develop-eggs/
 dist/
