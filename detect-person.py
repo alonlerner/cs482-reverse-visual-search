@@ -16,9 +16,8 @@ args = vars(ap.parse_args())
 
 # set the device we will be using to run the model
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-# load the list of categories in the COCO dataset and then generate a set of bounding box colors for each class
+# load the list of categories in the COCO dataset
 CLASSES = ['person']
-COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
 # load the model and set it to evaluation mode
 model = torchvision.models.detection.fasterrcnn_resnet50_fpn(weights='DEFAULT')
@@ -54,7 +53,7 @@ for i in range(0, len(detections["boxes"])):
 		# add the box to the array
 		a.append({ 'image': args["image"], 'bbox': [int(startX), int(startY), int(endX), int(endY)]})
 		
-
+# save the image and coordinates in the json file
 with open('person_boxes.json','r+') as file:
 	# load existing data into a dict.
 	file_data = json.load(file)
