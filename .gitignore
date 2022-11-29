@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 /instances_minitrain2017.json
+/features.npy
 
 # C extensions
 *.so
